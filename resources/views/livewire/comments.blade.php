@@ -1,29 +1,36 @@
-<div>
-
-    <section class="bg-white dark:bg-gray-900 py-8 lg:py-16">
-        <div class="max-w-2xl mx-auto px-4">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-lg lg:text-2xl font-bold text-gray-900 dark:text-white">Discussion
-                    ({{$comments->count()}})</h2>
+<div class="comments">
+    <section class="comments__section">
+        <div class="comments__container">
+            <div class="comments__header">
+                <h2 class="comments__title">
+                    Discusión ({{ $comments->count() }})
+                </h2>
             </div>
+
             @auth
-                @include('wirecomments::livewire.partials.comment-form',[
-                    'method'=>'postComment',
-                    'state'=>'newCommentState',
-                    'inputId'=> 'comment',
-                    'inputLabel'=> 'Your comment',
-                    'button'=>'Post comment'
+                @include('wirecomments::livewire.partials.comment-form', [
+                    'method' => 'postComment',
+                    'state' => 'newCommentState',
+                    'inputId' => 'comment',
+                    'inputLabel' => 'Your comment',
+                    'button' => 'Publicar comentario'
                 ])
             @else
-                <a class="mt-2 text-sm" href="/login">Log in to comment!</a>
+                <a class="comments__login-link" href="/login">Inicia sesión para comentar</a>
             @endauth
+
             @if($comments->count())
                 @foreach($comments as $comment)
-                    <livewire:comment :$comment :key="$comment->id"/>
+                    @livewire('wirecomments::livewire.comment', [
+                        'comment' => $comment,
+                    ], key($comment->id))
                 @endforeach
-                {{$comments->links()}}
+
+                <div class="comments__pagination">
+                    {{ $comments->links() }}
+                </div>
             @else
-                <p>No comments yet!</p>
+                <p class="comments__empty">Aún no hay comentarios.</p>
             @endif
         </div>
     </section>

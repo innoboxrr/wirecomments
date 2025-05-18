@@ -11,7 +11,7 @@ trait Commentable
     /**
      * @return MorphMany
      */
-    public function wirecomments(): \Illuminate\Database\Eloquent\Relations\MorphMany
+    public function comments(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Comment::class, 'commentable');
     }

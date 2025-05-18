@@ -51,6 +51,7 @@
     "extra": {
         "laravel": {
             "providers": [
+                "Innoboxrr\\Wirecomments\\Providers\\WirecommentsServiceProvider",
                 "Innoboxrr\\Wirecomments\\Providers\\MarkdownServiceProvider"
             ]
         }

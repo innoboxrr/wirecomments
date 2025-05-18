@@ -18,20 +18,14 @@ class Comment extends Component
     use AuthorizesRequests;
 
     public $comment;
-
     public $users = [];
-
     public $isReplying = false;
     public $hasReplies = false;
-
     public $showOptions = false;
-
     public $isEditing = false;
-
     public $replyState = [
         'body' => ''
     ];
-
     public $editState = [
         'body' => ''
     ];
