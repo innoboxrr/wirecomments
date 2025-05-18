@@ -16,7 +16,14 @@
                     'button' => 'Publicar comentario'
                 ])
             @else
-                <a class="comments__login-link" href="/login">Inicia sesión para comentar</a>
+                <a 
+                    class="comments__login-link" 
+                    style="display: block; margin-bottom: 1rem;"
+                    href="{{ $login }}?redirect={{ request()->url() }}"
+                    title="Inicia sesión para comentar"
+                    rel="nofollow">
+                    Inicia sesión para comentar
+                </a>
             @endauth
 
             @if($comments->count())
