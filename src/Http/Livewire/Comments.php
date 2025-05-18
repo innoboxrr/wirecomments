@@ -16,6 +16,8 @@ class Comments extends Component
 
     public $model;
 
+    public $login;
+
     public $users = [];
 
     public $showDropdown = false;
