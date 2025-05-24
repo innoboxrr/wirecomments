@@ -9,6 +9,7 @@ use Illuminate\Foundation\Application;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Innoboxrr\Wirecomments\Events\CommentPosted;
 
 class Comments extends Component
 {
@@ -66,6 +67,8 @@ class Comments extends Component
         $comment = $this->model->comments()->make($this->newCommentState);
         $comment->user()->associate(auth()->user());
         $comment->save();
+
+        event(new CommentPosted($comment));
 
         $this->newCommentState = [
             'body' => ''
