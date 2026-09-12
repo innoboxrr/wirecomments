@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('wire_comments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('parent_id')->nullable()->constrained('comments')->onDelete('cascade');
+            $table->foreignId('parent_id')->nullable()->constrained('wire_comments')->onDelete('cascade');
             $table->text('body');
             $table->morphs('commentable');
             $table->softDeletes();
@@ -26,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('wire_comments');
     }
 };
