@@ -1,83 +1,40 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Schema;
-use Livewire\LivewireServiceProvider;
-use Innoboxrr\Wirecomments\Providers\WirecommentsServiceProvider;
+namespace Innoboxrr\Wirecomments\Tests;
 
-abstract class TestCase extends \Orchestra\Testbench\TestCase
+use Orchestra\Testbench\TestCase as Testbench;
+
+/**
+ * Una aplicacion Laravel con los proveedores que el paquete declara en su
+ * composer.json.
+ *
+ * Se leen del propio composer.json y no de una lista escrita aqui: lo que se
+ * prueba tiene que ser exactamente lo que recibe quien instala el paquete, y
+ * una segunda lista acabaria divergiendo de la primera.
+ */
+abstract class TestCase extends Testbench
 {
     /**
-     * @param $app
-     * @return string[]
+     * @return array<int, class-string>
      */
     protected function getPackageProviders($app): array
     {
-        return [
-            WirecommentsServiceProvider::class,
-            LivewireServiceProvider::class,
-        ];
+        return self::declaredProviders();
     }
 
     /**
-     * @return void
+     * @return array<int, class-string>
      */
-    public function setUp(): void
+    public static function declaredProviders(): array
     {
-        parent::setUp();
-        Model::unguard();
-
-        $this->artisan('migrate', [
-            '--database' => 'testbench',
-            '--realpath' => realpath(__DIR__.'/../database/migrations')
-        ]);
+        return self::composer()['extra']['laravel']['providers'] ?? [];
     }
 
     /**
-     * @return void
+     * @return array<string, mixed>
      */
-    public function tearDown(): void
+    public static function composer(): array
     {
-        Schema::drop('articles');
-        Schema::drop('episodes');
-        Schema::drop('comments');
+        return json_decode((string) file_get_contents(dirname(__DIR__) . '/composer.json'), true);
     }
-
-    /**
-     * @param $app
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app): void
-    {
-        $app['config']->set('database.default', 'testbench');
-        $app['config']->set('database.connections.testbench', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => ''
-        ]);
-
-
-        Schema::create('users', function ($table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
-        Schema::create('articles', function ($table) {
-            $table->increments('id');
-            $table->string('slug')->unique();
-            $table->timestamps();
-        });
-
-        Schema::create('episodes', function ($table) {
-            $table->increments('id');
-            $table->string('slug')->unique();
-            $table->timestamps();
-        });
-    }
-
 }
